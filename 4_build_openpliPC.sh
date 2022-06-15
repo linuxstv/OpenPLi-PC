@@ -151,10 +151,6 @@ fi
 
 release=$(lsb_release -a 2>/dev/null | grep -i release | awk ' { print $2 } ')
 
-cp -fv patches/patch-c7e99ce2-to-PC.patch $PKG
-cd $PKG
-patch -p1 < patch-c7e99ce2-to-PC.patch
-
 if [ "$release" = "14.04" ]; then
 	echo ""
 	echo "********************************************************"
@@ -162,7 +158,6 @@ if [ "$release" = "14.04" ]; then
 	echo "                  *** USED g++-8 ***"
 	echo "********************************************************"
 	echo ""
-	cd ..
 	cp -fv patches/xenial_trusty.patch $PKG
 	cd $PKG
 	patch -p1 < xenial_trusty.patch
@@ -174,7 +169,6 @@ elif [ "$release" = "16.04" ]; then
 	echo "                  *** USED g++-8 ***"
 	echo "********************************************************"
 	echo ""
-	cd ..
 	cp -fv patches/xenial_trusty.patch $PKG
 	cd $PKG
 	patch -p1 < xenial_trusty.patch
@@ -193,7 +187,6 @@ elif [ "$release" = "20.04" ]; then
 	echo "                  *** USED g++-9 ***"
 	echo "********************************************************"
 	echo ""
-	cd ..
 	cp -fv patches/Makefile.am.patch $PKG
 	cd $PKG
 	patch -p1 < Makefile.am.patch
@@ -205,7 +198,6 @@ elif [ "$release" = "22.04" ]; then
 	echo "                  *** USED g++-11 ***"
 	echo "********************************************************"
 	echo ""
-	cd ..
 	if [ ! -f /lib/libc.so.6 ]; then
 		ln -s /lib/x86_64-linux-gnu/libc.so.6 /lib
 	fi
@@ -216,6 +208,11 @@ elif [ "$release" = "22.04" ]; then
 	patch -p1 < compile_py2.patch
 	export CXX=/usr/bin/g++-11
 fi
+
+cd ..
+cp -fv patches/patch-c7e99ce2-to-PC.patch $PKG
+cd $PKG
+patch -p1 < patch-c7e99ce2-to-PC.patch
 
 # Configure
 if [ "$DO_CONFIGURE" -eq "1" ]; then
